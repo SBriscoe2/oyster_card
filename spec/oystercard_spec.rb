@@ -3,7 +3,7 @@
 require 'oyster_card'
 
 describe Oystercard do
-let(:add_top_up_money) { subject.top_up(20) }
+  let(:add_top_up_money) { subject.top_up(20) }
 
   it { is_expected.to respond_to :balance }
 
@@ -21,6 +21,6 @@ let(:add_top_up_money) { subject.top_up(20) }
   it 'is expected to show error if top up exceeds 90' do
     max_balance = Oystercard::TOP_UP_MAX
     subject.top_up(max_balance)
-    expect { subject.top_up(max_balance)}.to raise_error "Balance exceeds #{max_balance}"
+    expect { subject.top_up(max_balance) }.to raise_error "Balance exceeds #{max_balance}"
   end
 end
