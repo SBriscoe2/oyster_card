@@ -64,11 +64,23 @@ describe Oystercard do
       expect { subject.touch_out }.to change { subject.balance }.by(-min_balance)
     end
 
-    it 'it forgets the entry station when the card is touched out'do
+    it 'it forgets the entry station when the card is touched out' do
       add_top_up_money
       subject.touch_in(:station)
       subject.touch_out
-      expect(subject.entry_station).to eq nil
+      expect(subject.touch_out).to eq nil
     end
+
+    # it 'show the station where the card was touched out' do
+    #   add_top_up_money
+    #   subject.touch_in(:station)
+    #   subject.touch_out
+    #   expect(subject.exit_station).to eq exit_station
+    # end
   end
+
+    it 'checks on initialize that journey list is empty' do
+      subject = Oystercard.new
+      expect(subject.journey_list).to be_empty
+    end
 end
