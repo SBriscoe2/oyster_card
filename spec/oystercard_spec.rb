@@ -4,7 +4,8 @@ require 'oyster_card'
 
 describe Oystercard do
   let(:add_top_up_money) { subject.top_up(20) }
-  let(:station) { double :station }
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
   min_balance = Oystercard::MINIMUM_BALANCE
 
   it { is_expected.to respond_to :balance }
@@ -24,7 +25,8 @@ describe Oystercard do
     it 'is expected to show error if top up exceeds 90' do
       max_balance = Oystercard::TOP_UP_MAX
       subject.top_up(max_balance)
-      expect { subject.top_up(1) }.to raise_error "Balance exceeds #{max_balance}"
+      expect { subject.top_up(1) }.to \
+        raise_error "Balance exceeds #{max_balance}"
     end
   end
 
@@ -54,29 +56,30 @@ describe Oystercard do
     it 'shows card has been touched out' do
       add_top_up_money
       subject.touch_in(:station)
-      expect { subject.touch_out }.to \
+      expect { subject.touch_out(:station) }.to \
         change { subject.in_journey? }.from(true).to(false)
     end
 
     it 'charges the minimum balance when the card is touched out' do
       add_top_up_money
       subject.touch_in(:station)
-      expect { subject.touch_out }.to change { subject.balance }.by(-min_balance)
+      expect { subject.touch_out(:station) }.to \
+        change { subject.balance }.by(-min_balance)
     end
 
     it 'it forgets the entry station when the card is touched out' do
       add_top_up_money
       subject.touch_in(:station)
-      subject.touch_out
-      expect(subject.touch_out).to eq nil
+      subject.touch_out(:station)
+      expect(subject.touch_out(:station)).to eq nil
     end
 
-    # it 'show the station where the card was touched out' do
-    #   add_top_up_money
-    #   subject.touch_in(:station)
-    #   subject.touch_out
-    #   expect(subject.exit_station).to eq exit_station
-    # end
+    it 'show the station where the card was touched out' do
+      add_top_up_money
+      subject.touch_in(:station)
+      subject.touch_out(:station)
+      expect(subject.exit_station).to eq :station
+    end
   end
 
     it 'checks on initialize that journey list is empty' do
