@@ -4,6 +4,7 @@ require 'oyster_card'
 
 describe Oystercard do
   let(:add_top_up_money) { subject.top_up(20) }
+  let(:station) { double :station }
   min_balance = Oystercard::MINIMUM_BALANCE
 
   it { is_expected.to respond_to :balance }
@@ -34,33 +35,40 @@ describe Oystercard do
 
     it 'shows card has been touched in' do
       add_top_up_money
-      expect { subject.touch_in("Paddington") }.to \
+      expect { subject.touch_in(:station) }.to \
         change { subject.in_journey? }.from(false).to(true)
     end
 
     it 'does not allow touching in if balance is below the minimum level' do
-      expect { subject.touch_in("Paddington") }.to raise_error 'Insufficient funds'
+      expect { subject.touch_in(:station) }.to raise_error 'Insufficient funds'
     end
 
     it 'shows the station where the card was touched in' do
       add_top_up_money
-      subject.touch_in("Paddington")
-      expect(subject.entry_station).to eq "Paddington"
+      subject.touch_in(:station)
+      expect(subject.entry_station).to eq :station
     end
   end
 
   context 'touching out' do
     it 'shows card has been touched out' do
       add_top_up_money
-      subject.touch_in("Paddington")
+      subject.touch_in(:station)
       expect { subject.touch_out }.to \
         change { subject.in_journey? }.from(true).to(false)
     end
 
     it 'charges the minimum balance when the card is touched out' do
       add_top_up_money
-      subject.touch_in("Paddington")
+      subject.touch_in(:station)
       expect { subject.touch_out }.to change { subject.balance }.by(-min_balance)
+    end
+
+    it 'it forgets the entry station when the card is touched out'do
+      add_top_up_money
+      subject.touch_in(:station)
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
     end
   end
 end
