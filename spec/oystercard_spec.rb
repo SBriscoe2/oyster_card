@@ -15,7 +15,7 @@ describe Oystercard do
 
   it 'is expected to show a balance of 40' do
     add_top_up_money
-    expect(subject.top_up(20)).to eq 40
+    expect { subject.top_up(20) }.to change { subject.balance }.by(20)
   end
 
   it 'is expected to show error if top up exceeds 90' do
@@ -26,6 +26,6 @@ describe Oystercard do
 
   it 'is expected to deduct a balance of 10' do
     add_top_up_money
-    expect { subject.deduct(10) }.to change { subject.balance }.by(-10) 
+    expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
   end
 end
