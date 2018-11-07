@@ -21,6 +21,11 @@ describe Oystercard do
   it 'is expected to show error if top up exceeds 90' do
     max_balance = Oystercard::TOP_UP_MAX
     subject.top_up(max_balance)
-    expect { subject.top_up(max_balance) }.to raise_error "Balance exceeds #{max_balance}"
+    expect { subject.top_up(1) }.to raise_error "Balance exceeds #{max_balance}"
+  end
+
+  it 'is expected to deduct a balance of 10' do
+    add_top_up_money
+    expect { subject.deduct(10) }.to change { subject.balance }.by(-10) 
   end
 end
