@@ -15,7 +15,7 @@ describe Oystercard do
 
   it 'is expected to show a balance of 40' do
     add_top_up_money
-    expect { subject.top_up(20) }.to change { subject.balance }.by(20)
+    expect(subject.top_up(20 )).to eq 40
   end
 
   it 'is expected to show error if top up exceeds 90' do
@@ -28,4 +28,18 @@ describe Oystercard do
     add_top_up_money
     expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
   end
+
+  it 'has not been touched in' do
+    expect(subject.in_journey?).to eq false
+  end
+
+  it 'shows card has been touched in' do
+    expect { subject.touch_in }.to change { subject.in_journey? }.from(false).to(true)
+  end
+
+  it 'shows card has been touched out' do
+    subject.touch_in
+    expect { subject.touch_out }.to change { subject.in_journey? }.from(true).to(false)
+  end
+
 end
