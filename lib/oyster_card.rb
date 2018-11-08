@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Oystercard
   attr_reader :balance
   attr_reader :entry_station
