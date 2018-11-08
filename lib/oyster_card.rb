@@ -31,9 +31,14 @@ class Oystercard
     @entry_station = station
   end
 
+  def journey
+    @journey_list
+  end
+
   def touch_out(station)
     deduct MINIMUM_BALANCE
     @exit_station = station
+    @journey_list << { entry_station => exit_station }
     @entry_station = nil
   end
 

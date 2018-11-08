@@ -6,6 +6,7 @@ describe Oystercard do
   let(:add_top_up_money) { subject.top_up(20) }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
+
   min_balance = Oystercard::MINIMUM_BALANCE
 
   it { is_expected.to respond_to :balance }
@@ -85,5 +86,12 @@ describe Oystercard do
     it 'checks on initialize that journey list is empty' do
       subject = Oystercard.new
       expect(subject.journey_list).to be_empty
+    end
+
+    it 'checks that the entry and exit station are stored as one journey' do
+      add_top_up_money
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journey_list).to eq [{ entry_station => exit_station }]
     end
 end
