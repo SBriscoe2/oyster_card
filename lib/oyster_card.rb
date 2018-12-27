@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Oystercard
   attr_reader :balance
   attr_reader :entry_station
@@ -15,7 +14,7 @@ class Oystercard
 
   def top_up(top_up_value)
     raise "Balance exceeds #{TOP_UP_MAX}" if \
-      @balance + top_up_value > TOP_UP_MAX
+    @balance + top_up_value > TOP_UP_MAX
 
     @balance += top_up_value
   end
